@@ -1,153 +1,248 @@
 # Student Management System
 
-A Python-based **Student Management System** developed as a Python Module Capstone Project.
+A simple **Python-based Student Management System** for managing student information, marks, grades, and academic performance.
 
-The system allows users to register students, manage student information, record marks, calculate grades, generate report cards, search students, sort and filter records, and store data permanently using JSON.
-
----
-
-##  Project Overview
-
-The Student Management System is a menu-driven console application designed to demonstrate practical Python programming concepts.
-
-The project uses **Object-Oriented Programming (OOP)**, multiple Python modules, file handling, JSON, exception handling, functions, loops, conditionals, lists, dictionaries, list comprehensions, lambda functions, and CRUD operations.
-
-The application is focused entirely on managing student records and academic performance.
+The system uses **object-oriented programming (OOP)** and stores student records in a **JSON file**, allowing data to persist between program runs.
 
 ---
 
-##  Project Objectives
+## Features
 
-The main objectives of this project are to:
+The system provides the following functionality:
 
-* Manage student information
-* Register new students
-* Search for students
+* Add a new student
+* View a student by ID
+* View all students
 * Update student information
-* Delete student records
-* Record and update student marks
-* Calculate student averages
-* Assign grades automatically
+* Delete a student
+* Search students by ID or name
+* Add or update subject marks
+* Calculate individual student averages
+* Automatically calculate grades
 * Determine pass/fail status
 * Generate student report cards
-* Find the highest-performing student
-* Find the lowest-performing student
+* Find the student with the highest average
+* Find the student with the lowest average
 * Calculate the class average
-* Sort students
 * Filter students by grade
-* Store student data permanently
-* Demonstrate different Python programming concepts
+* Sort students alphabetically by name
+* Sort students by average marks
+* Save student data to a JSON file
+* Load student data from a JSON file
+* Count the total number of students
 
 ---
 
-##  Features
+## Project Structure
 
-### 1. Register Student
-
-Users can register a student by providing:
-
-* Student ID
-* Name
-* Age
-* Gender
-* Course
-* Year of study
-
-The system prevents duplicate student IDs.
-
----
-
-### 2. View All Students
-
-Displays all registered students together with:
-
-* Student ID
-* Name
-* Course
-* Year
-* Average
-* Grade
-
----
-
-### 3. Search Student
-
-Students can be searched using:
-
-* Student ID
-* Student name
-
-The search is case-insensitive.
-
-For example:
+A recommended project structure is:
 
 ```text
-Enter student ID or name: john
+StudentManagementSystem/
+│
+├── student.py
+├── student_manager.py
+├── main.py
+├── students.json
+└── README.md
 ```
 
----
+### `student.py`
 
-### 4. Update Student
+Contains the `Student` class.
 
-Existing student information can be updated.
-
-The system allows users to modify:
-
-* Name
-* Age
-* Gender
-* Course
-* Year
-
-Pressing Enter keeps the existing value.
-
----
-
-### 5. Delete Student
-
-Users can delete a student using their Student ID.
-
-The system asks for confirmation before deleting the record.
-
----
-
-### 6. Add or Update Marks
-
-Marks can be recorded for different subjects.
-
-For example:
-
-```text
-Mathematics: 85
-English: 78
-Science: 92
-```
-
-Marks must be between:
-
-```text
-0 - 100
-```
-
----
-
-### 7. Student Report Card
-
-The system generates a report containing:
+The `Student` class represents an individual student and manages:
 
 * Student details
 * Subject marks
-* Average
-* Grade
+* Average calculation
+* Grade calculation
 * Pass/fail status
+* Report card generation
+* Conversion to and from dictionaries
+
+### `student_manager.py`
+
+Contains the `StudentManager` class.
+
+The `StudentManager` class manages multiple student records and provides operations such as:
+
+* Adding students
+* Updating students
+* Deleting students
+* Searching
+* Sorting
+* Filtering
+* Performance analysis
+* Saving and loading data
+
+### `main.py`
+
+This file can be used to create the application's user interface, such as a command-line menu, and connect the `Student` and `StudentManager` classes.
+
+### `students.json`
+
+This file stores student records so that information is not lost when the application closes.
+
+---
+
+# Student Class
+
+The `Student` class is responsible for representing an individual student.
+
+## Creating a Student
+
+A student can be created using:
+
+```python
+from student import Student
+
+student = Student(
+    "S001",
+    "John Doe",
+    20,
+    "Male",
+    "Computer Science",
+    2
+)
+```
+
+The constructor accepts:
+
+| Parameter    | Description                          |
+| ------------ | ------------------------------------ |
+| `student_id` | Unique student identification number |
+| `name`       | Student's name                       |
+| `age`        | Student's age                        |
+| `gender`     | Student's gender                     |
+| `course`     | Student's course/program             |
+| `year`       | Current academic year                |
+
+---
+
+# Adding Marks
+
+Marks can be added using the `add_mark()` method.
+
+```python
+student.add_mark("Mathematics", 85)
+student.add_mark("Programming", 90)
+student.add_mark("Database Systems", 78)
+```
+
+Marks must be between **0 and 100**.
+
+For example:
+
+```python
+student.add_mark("Mathematics", 105)
+```
+
+will raise:
+
+```text
+ValueError: Mark must be between 0 and 100.
+```
+
+Adding a mark for an existing subject updates the previous mark.
+
+---
+
+# Calculating the Average
+
+The student's average can be calculated using:
+
+```python
+average = student.calculate_average()
+
+print(average)
+```
+
+For example, if a student has:
+
+```text
+Mathematics: 80
+Programming: 90
+Database: 70
+```
+
+the average is:
+
+```text
+80.0
+```
+
+If the student has no marks, the method returns:
+
+```text
+0
+```
+
+---
+
+# Grading System
+
+The system calculates grades based on the student's average.
+
+|    Average | Grade |
+| ---------: | :---: |
+|   80 – 100 |   A   |
+| 70 – 79.99 |   B   |
+| 60 – 69.99 |   C   |
+| 50 – 59.99 |   D   |
+|   Below 50 |   F   |
 
 Example:
+
+```python
+print(student.get_grade())
+```
+
+Output:
+
+```text
+A
+```
+
+---
+
+# Pass/Fail Status
+
+A student passes when their average is **50 or higher**.
+
+```python
+print(student.get_status())
+```
+
+Possible results:
+
+```text
+PASS
+```
+
+or
+
+```text
+FAIL
+```
+
+---
+
+# Generating a Report Card
+
+The `generate_report()` method creates a formatted report containing the student's information, marks, average, grade, and status.
+
+```python
+print(student.generate_report())
+```
+
+Example output:
 
 ```text
 =============================================
            STUDENT REPORT CARD
 =============================================
-Student ID : ST001
+Student ID : S001
 Name       : John Doe
 Age        : 20
 Gender     : Male
@@ -157,10 +252,10 @@ Year       : 2
 MARKS
 ---------------------------------------------
 Mathematics    : 85
-English        : 78
-Science        : 92
+Programming    : 90
+Database       : 78
 ---------------------------------------------
-Average    : 85.00
+Average    : 84.33
 Grade      : A
 Status     : PASS
 =============================================
@@ -168,511 +263,288 @@ Status     : PASS
 
 ---
 
-## Grading System
+# StudentManager Class
 
-The system calculates the grade based on the student's average.
+The `StudentManager` class manages all students in the system.
 
-|  Average | Grade |
-| -------: | :---: |
-| 80 - 100 |   A   |
-|  70 - 79 |   B   |
-|  60 - 69 |   C   |
-|  50 - 59 |   D   |
-| Below 50 |   F   |
+Create a manager using:
 
-A student passes when their average is **50 or above**.
+```python
+from student_manager import StudentManager
 
----
+manager = StudentManager()
+```
 
-##  Academic Statistics
-
-The system can calculate:
-
-* Top-performing student
-* Lowest-performing student
-* Class average
-* Total number of students
-
-This allows the application to provide basic class-level statistics.
-
----
-
-## Sorting and Filtering
-
-Students can be sorted by:
-
-### Name
-
-Students are displayed alphabetically.
-
-### Average
-
-Students are displayed according to their academic average.
-
-### Grade Filtering
-
-Users can filter students by:
+By default, student records are stored in:
 
 ```text
-A
-B
-C
-D
-F
+students.json
 ```
 
-For example:
-
-```text
-Enter grade: A
-```
-
-The system will display students who currently have an A grade.
-
----
-
-#  Python Concepts Demonstrated
-
-This project demonstrates a wide range of Python programming concepts.
-
-## Variables
-
-Used to store student information and program data.
+A different filename can also be specified:
 
 ```python
-name = "John"
-age = 20
-course = "Computer Science"
+manager = StudentManager("data.json")
 ```
 
 ---
 
-## Data Types
-
-The project uses:
-
-* Strings
-* Integers
-* Floats
-* Lists
-* Dictionaries
-* Boolean values
-
----
-
-## Lists
-
-Lists are used when working with collections of students.
-
-```python
-students = manager.get_all_students()
-```
-
----
-
-## Dictionaries
-
-Student marks are stored using a dictionary.
-
-```python
-student.marks = {
-    "Mathematics": 85,
-    "English": 78,
-    "Science": 92
-}
-```
-
-Student records are also stored using dictionaries when converting objects to JSON.
-
----
-
-## Tuples
-
-Tuples can be used to represent fixed groups of values where appropriate.
-
----
-
-## Sets
-
-Sets can be used when working with unique values such as unique subjects or identifiers.
-
----
-
-## Conditional Statements
-
-The project uses:
-
-```python
-if
-elif
-else
-```
-
-For example, grades are assigned using conditions:
-
-```python
-if average >= 80:
-    return "A"
-elif average >= 70:
-    return "B"
-```
-
----
-
-## Loops
-
-The project uses:
-
-* `for` loops
-* `while` loops
-
-For example, the main menu continuously runs until the user chooses Exit.
-
----
-
-## Functions
-
-The application is divided into reusable functions such as:
-
-```python
-register_student()
-view_all_students()
-search_student()
-update_student()
-delete_student()
-add_mark()
-view_report()
-```
-
-This keeps the program organized and easier to maintain.
-
----
-
-## Object-Oriented Programming
-
-The project uses classes and objects.
-
-The main class is:
-
-```python
-class Student:
-```
-
-A student object can be created using:
+# Adding a Student
 
 ```python
 student = Student(
-    student_id,
-    name,
-    age,
-    gender,
-    course,
-    year
+    "S001",
+    "John Doe",
+    20,
+    "Male",
+    "Computer Science",
+    2
+)
+
+manager.add_student(student)
+```
+
+Student IDs must be unique.
+
+If an existing ID is used, the system raises:
+
+```text
+ValueError: A student with this ID already exists.
+```
+
+---
+
+# Getting a Student
+
+A student can be retrieved using their ID:
+
+```python
+student = manager.get_student("S001")
+```
+
+If the student does not exist, the method returns:
+
+```python
+None
+```
+
+---
+
+# Getting All Students
+
+```python
+students = manager.get_all_students()
+
+for student in students:
+    print(student.name)
+```
+
+The method returns a list containing all students.
+
+---
+
+# Updating Student Information
+
+Student information can be updated using:
+
+```python
+manager.update_student(
+    "S001",
+    name="Jane Doe",
+    age=21,
+    course="Information Technology",
+    year=3
 )
 ```
 
-The project also uses:
+The student ID itself is not changed by this method.
 
-```python
-class StudentManager:
-```
+If the student does not exist, the system raises:
 
-to manage multiple student objects.
-
----
-
-## Constructors
-
-The `Student` class uses the constructor:
-
-```python
-def __init__(self, student_id, name, age, gender, course, year):
-```
-
-The constructor initializes the student's information.
-
----
-
-## Methods
-
-The `Student` class contains methods such as:
-
-```python
-add_mark()
-calculate_average()
-get_grade()
-get_status()
-generate_report()
-to_dict()
+```text
+ValueError: Student not found.
 ```
 
 ---
 
-## Exception Handling
+# Deleting a Student
 
-The project uses:
+A student can be removed using:
 
 ```python
-try
-except
+manager.delete_student("S001")
 ```
 
-to handle invalid user input.
+If the student does not exist, a `ValueError` is raised.
+
+---
+
+# Searching for Students
+
+Students can be searched by either their ID or name.
+
+```python
+results = manager.search_students("john")
+
+for student in results:
+    print(student.student_id, student.name)
+```
+
+The search is **case-insensitive**.
 
 For example:
 
-```python
-try:
-    age = int(input("Enter age: "))
-except ValueError:
-    print("Please enter a valid number.")
+```text
+john
+John
+JOHN
 ```
 
-This prevents the application from crashing because of invalid input.
+will all match the same student name.
 
 ---
 
-## List Comprehensions
+# Adding Marks Through StudentManager
 
-List comprehensions are used to efficiently filter students.
-
-Example:
+Marks can also be added directly through the manager:
 
 ```python
-students_with_marks = [
-    student
-    for student in self.students.values()
-    if student.marks
-]
+manager.add_mark("S001", "Mathematics", 85)
 ```
+
+This automatically finds the student and adds or updates the specified mark.
 
 ---
 
-## Lambda Functions
+# Finding the Top Student
 
-Lambda functions are used when sorting students.
-
-Example:
+The student with the highest average can be found using:
 
 ```python
-sorted(
-    self.students.values(),
-    key=lambda student: student.name.lower()
-)
+top_student = manager.get_top_student()
+
+if top_student:
+    print(top_student.name)
+    print(top_student.calculate_average())
 ```
 
----
+Students without marks are ignored.
 
-## File Handling
-
-The system stores data in a JSON file.
-
-The project uses:
+If there are no students with marks, the method returns:
 
 ```python
-open()
-```
-
-to read and write files.
-
----
-
-## JSON
-
-Student records are stored in:
-
-```text
-students.json
-```
-
-JSON makes it possible to keep student information after the program is closed.
-
----
-
-# Project Structure
-
-```text
-student-management-system/
-│
-├── main.py
-├── student.py
-├── student_manager.py
-├── students.json
-└── README.md
-```
-
-### `main.py`
-
-Contains the application's user interface and menu system.
-
-Responsible for:
-
-* User input
-* Menu display
-* Calling the appropriate functions
-* Handling user interaction
-
----
-
-### `student.py`
-
-Contains the `Student` class.
-
-Responsible for:
-
-* Student information
-* Marks
-* Average calculation
-* Grade calculation
-* Pass/fail status
-* Report generation
-
----
-
-### `student_manager.py`
-
-Contains the `StudentManager` class.
-
-Responsible for:
-
-* Adding students
-* Searching students
-* Updating students
-* Deleting students
-* Sorting students
-* Filtering students
-* Calculating class statistics
-* Saving and loading data
-
----
-
-### `students.json`
-
-Stores student records permanently.
-
-This file is automatically created when student data is saved.
-
----
-
-### `README.md`
-
-Contains the documentation for the project.
-
----
-
-# How to Run the Project
-
-## Step 1: Open the Project Folder
-
-Open the project folder in your code editor or terminal.
-
----
-
-## Step 2: Make Sure Python Is Installed
-
-Check your Python version:
-
-```bash
-python --version
-```
-
-or:
-
-```bash
-python3 --version
+None
 ```
 
 ---
 
-## Step 3: Run the Program
+# Finding the Lowest Student
 
-Run:
+The student with the lowest average can be found using:
 
-```bash
-python main.py
+```python
+student = manager.get_lowest_student()
+
+if student:
+    print(student.name)
+    print(student.calculate_average())
 ```
 
-or:
+Students without marks are ignored.
 
-```bash
-python3 main.py
+---
+
+# Calculating the Class Average
+
+The class average can be calculated using:
+
+```python
+average = manager.calculate_class_average()
+
+print(f"Class Average: {average:.2f}")
+```
+
+Only students who have at least one recorded mark are included.
+
+---
+
+# Filtering Students by Grade
+
+Students can be filtered based on their grade.
+
+```python
+students = manager.filter_by_grade("A")
+
+for student in students:
+    print(student.name)
+```
+
+The grade is converted to uppercase, so the following are equivalent:
+
+```python
+manager.filter_by_grade("A")
+```
+
+and:
+
+```python
+manager.filter_by_grade("a")
 ```
 
 ---
 
-# Main Menu
+# Sorting Students by Name
 
-When the program starts, you will see:
+Students can be sorted alphabetically:
 
-```text
-=============================================
-       STUDENT MANAGEMENT SYSTEM
-=============================================
+```python
+students = manager.sort_by_name()
 
-1. Register Student
-2. View All Students
-3. Search Student
-4. Update Student
-5. Delete Student
-6. Add/Update Marks
-7. View Student Report
-8. Show Top Student
-9. Show Class Statistics
-10. Sort Students
-11. Filter Students by Grade
-12. Exit
-=============================================
+for student in students:
+    print(student.name)
+```
+
+The sorting is case-insensitive.
+
+---
+
+# Sorting Students by Average
+
+Students can also be sorted according to their academic average.
+
+By default, sorting is descending:
+
+```python
+students = manager.sort_by_average()
+
+for student in students:
+    print(student.name, student.calculate_average())
+```
+
+To sort from lowest to highest:
+
+```python
+students = manager.sort_by_average(descending=False)
 ```
 
 ---
 
-# Example Usage
+# Saving Student Data
 
-### Register a student
+Student records can be saved to a JSON file using:
 
-```text
-Enter your choice: 1
-
-Enter student ID: ST001
-Enter student name: John Doe
-Enter age: 20
-Enter gender: Male
-Enter course: Computer Science
-Enter year of study: 2
-
-Student registered successfully!
+```python
+manager.save_students()
 ```
 
-### Add marks
+The data is stored in the configured JSON file.
 
-```text
-Enter your choice: 6
-
-Enter student ID: ST001
-Enter subject: Mathematics
-Enter mark: 85
-
-Mark saved successfully.
-```
-
-Repeat this for other subjects.
-
----
-
-# Data Persistence
-
-The system automatically saves student information to:
-
-```text
-students.json
-```
-
-For example:
+A typical JSON structure looks like:
 
 ```json
 {
-    "ST001": {
-        "student_id": "ST001",
+    "S001": {
+        "student_id": "S001",
         "name": "John Doe",
         "age": 20,
         "gender": "Male",
@@ -680,19 +552,21 @@ For example:
         "year": 2,
         "marks": {
             "Mathematics": 85,
-            "English": 78,
-            "Science": 92
+            "Programming": 90,
+            "Database": 78
         }
     }
 }
 ```
 
-When the application starts again, the saved information is loaded automatically.
-
 ---
 
-# CRUD Operations
+# Loading Student Data
 
-The project demonstrates the four basic CRUD operations.
+Previously saved data can be loaded using:
 
-| Operation
+```python
+manager.load_students()
+```
+
+If the JSON file does not exist, the method simp
