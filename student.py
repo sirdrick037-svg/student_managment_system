@@ -1,6 +1,5 @@
 class Student:
 
-
  def __init__(self, student_id, name, age, gender, year):
     self.student_id = student_id
     self.name = name
@@ -8,13 +7,11 @@ class Student:
     self.gender = gender
     self.year = year
 
-    # Dictionary:
-    # subject name -> mark
     self.marks = {}
 
 def add_mark(self, subject, mark):
     """
-    Add or update a mark for a subject.
+    Add or update a subject mark.
     """
 
     if mark < 0 or mark > 100:
@@ -26,7 +23,7 @@ def add_mark(self, subject, mark):
 
 def calculate_average(self):
     """
-    Calculate the student's average mark.
+    Calculate the average mark.
     """
 
     if not self.marks:
@@ -34,12 +31,14 @@ def calculate_average(self):
 
     total = sum(self.marks.values())
 
-    return total / len(self.marks)
+    average = total / len(self.marks)
+
+    return average
 
 @staticmethod
 def get_mark_grade(mark):
     """
-    Calculate the grade for one mark.
+    Convert a mark into a grade.
     """
 
     if mark >= 80:
@@ -78,7 +77,7 @@ def get_grade_comment(grade):
 
 def get_grade(self):
     """
-    Calculate the overall grade.
+    Get the student's overall grade.
     """
 
     average = self.calculate_average()
@@ -87,7 +86,7 @@ def get_grade(self):
 
 def get_overall_comment(self):
     """
-    Get a comment for the overall grade.
+    Get the overall comment.
     """
 
     grade = self.get_grade()
@@ -99,10 +98,13 @@ def get_status(self):
     Determine whether the student passed or failed.
     """
 
-    if self.calculate_average() >= 50:
+    average = self.calculate_average()
+
+    if average >= 50:
         return "PASS"
 
-    return "FAIL"
+    else:
+        return "FAIL"
 
 def generate_report(self):
     """
@@ -172,8 +174,8 @@ def generate_report(self):
 
 def to_dict(self):
     """
-    Convert the Student object into a dictionary
-    so it can be saved as JSON.
+    Convert the Student object to a dictionary
+    for saving as JSON.
     """
 
     return {
@@ -188,7 +190,7 @@ def to_dict(self):
 @classmethod
 def from_dict(cls, data):
     """
-    Create a Student object from dictionary data.
+    Create a Student object from saved JSON data.
     """
 
     student = cls(
