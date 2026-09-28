@@ -1,0 +1,11 @@
+{
+    "001": {
+        "student_id": "001",
+        "name": "Mark Thomas",
+        "age": 17,
+        "gender": "male",
+        "course": "data science",
+        "year": 2,
+        "marks": {}
+    }
+}
