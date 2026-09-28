@@ -103,102 +103,74 @@ class Student:
 
         return "FAIL"
 
-    def generate_report(self):
-        """
-        Generate a complete student results report.
-        """
 
-        report = []
+def generate_report(self):
+    """
+    Generate a simple student results report.
+    """
 
-        report.append("=" * 80)
-        report.append(
-            "STUDENT RESULTS"
-        )
-        report.append("=" * 80)
+    report = []
 
-        report.append(
-            f"Student ID: {self.student_id}"
-        )
+    # Heading
+    report.append("=" * 40)
+    report.append("STUDENT RESULT")
+    report.append("=" * 40)
 
-        report.append(
-            f"Name: {self.name}"
-        )
+    # Student information
+    report.append("")
+    report.append(
+        f"Student ID: {self.student_id}"
+    )
 
-        report.append(
-            f"Age: {self.age}"
-        )
+    report.append(
+        f"Name: {self.name}"
+    )
 
-        report.append(
-            f"Gender: {self.gender}"
-        )
+    # Subjects
+    report.append("")
+    report.append("Subjects:")
 
-        report.append(
-            f"Year       : {self.year}"
-        )
+    if self.marks:
 
-        report.append("-" * 80)
-
-        report.append(
-            f"{'SUBJECT':<20}"
-            f"{'MARK':<10}"
-            f"{'GRADE':<10}"
-            f"COMMENT"
-        )
-
-        report.append("-" * 80)
-
-        if self.marks:
-
-            for subject, mark in self.marks.items():
-
-                grade = self.get_mark_grade(mark)
-
-                comment = self.get_grade_comment(
-                    grade
-                )
-
-                report.append(
-                    f"{subject:<20}"
-                    f"{mark:<10.2f}"
-                    f"{grade:<10}"
-                    f"{comment}"
-                )
-
-        else:
+        for subject, mark in self.marks.items():
 
             report.append(
-                "No subjects or marks recorded."
+                f"{subject}: {mark:.2f}"
             )
 
-        report.append("-" * 80)
-
-        overall_grade = self.get_grade()
-
-        overall_comment = self.get_overall_comment()
+    else:
 
         report.append(
-            f"Average       : "
-            f"{self.calculate_average():.2f}"
+            "No subjects or marks recorded."
         )
 
-        report.append(
-            f"Overall Grade : "
-            f"{overall_grade}"
-        )
+    # Results
+    report.append("")
+    report.append("Result:")
 
-        report.append(
-            f"Status        : "
-            f"{self.get_status()}"
-        )
+    report.append(
+        f"Average: {self.calculate_average():.2f}"
+    )
 
-        report.append(
-            f"Comment       : "
-            f"{overall_comment}"
-        )
+    report.append(
+        f"Grade: {self.get_grade()}"
+    )
 
-        report.append("=" * 80)
+    report.append(
+        f"Status: {self.get_status()}"
+    )
 
-        return "\n".join(report)
+    report.append(
+        f"Comment: {self.get_overall_comment()}"
+    )
+
+    # Closing line
+    report.append("")
+    report.append("=" * 40)
+
+    return "\n".join(report)
+
+
 
     def to_dict(self):
         """

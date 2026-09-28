@@ -621,9 +621,6 @@ def sort_students(manager):
         "Choose an option: "
     ).strip()
 
-    # ------------------------------
-    # SORT BY NAME
-    # ------------------------------
     if choice == "1":
 
         students = (
@@ -676,13 +673,7 @@ def filter_students(manager):
         "Enter grade (A, B, C, D, F): "
     ).strip().upper()
 
-    if grade not in [
-        "A",
-        "B",
-        "C",
-        "D",
-        "F"
-    ]:
+    if grade not in ["A","B","C","D","F"]:
 
         print(
             "Invalid grade."
