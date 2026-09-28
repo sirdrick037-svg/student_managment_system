@@ -14,26 +14,42 @@ class StudentManager:
         self.students = {}
 
     def add_student(self, student):
-        """Add a new student to the system."""
+        """
+        Add a new student.
+        """
 
         if student.student_id in self.students:
-            raise ValueError("A student with this ID already exists.")
+            raise ValueError(
+                "A student with this ID already exists."
+            )
 
         self.students[student.student_id] = student
 
     def get_student(self, student_id):
-        """Find a student using their ID."""
+        """
+        Find a student using their ID.
+        """
 
         return self.students.get(student_id)
 
     def get_all_students(self):
-        """Return all students."""
+        """
+        Return all students as a list.
+        """
 
         return list(self.students.values())
 
-    def update_student(self, student_id, name=None, age=None,
-                       gender=None, subject=None, year=None):
-        """Update student information."""
+    def update_student(
+        self,
+        student_id,
+        name=None,
+        age=None,
+        gender=None,
+        year=None
+    ):
+        """
+        Update student information.
+        """
 
         student = self.get_student(student_id)
 
@@ -49,14 +65,13 @@ class StudentManager:
         if gender:
             student.gender = gender
 
-        if subject:
-            student.subject = subject
-
         if year is not None:
             student.year = year
 
     def delete_student(self, student_id):
-        """Delete a student from the system."""
+        """
+        Delete a student.
+        """
 
         if student_id not in self.students:
             raise ValueError("Student not found.")
@@ -64,24 +79,27 @@ class StudentManager:
         del self.students[student_id]
 
     def search_students(self, keyword):
-        """Search students by ID or name."""
+        """
+        Search students by ID or name.
+        """
 
         keyword = keyword.lower()
 
-        results = []
-
-        for student in self.students.values():
-
+        results = [
+            student
+            for student in self.students.values()
             if (
                 keyword in student.student_id.lower()
                 or keyword in student.name.lower()
-            ):
-                results.append(student)
+            )
+        ]
 
         return results
 
     def add_mark(self, student_id, subject, mark):
-        """Add or update a student's mark."""
+        """
+        Add or update a subject mark.
+        """
 
         student = self.get_student(student_id)
 
@@ -91,7 +109,9 @@ class StudentManager:
         student.add_mark(subject, mark)
 
     def get_top_student(self):
-        """Return the student with the highest average."""
+        """
+        Find the student with the highest average.
+        """
 
         students_with_marks = [
             student
@@ -104,11 +124,14 @@ class StudentManager:
 
         return max(
             students_with_marks,
-            key=lambda student: student.calculate_average()
+            key=lambda student:
+            student.calculate_average()
         )
 
     def get_lowest_student(self):
-        """Return the student with the lowest average."""
+        """
+        Find the student with the lowest average.
+        """
 
         students_with_marks = [
             student
@@ -121,11 +144,14 @@ class StudentManager:
 
         return min(
             students_with_marks,
-            key=lambda student: student.calculate_average()
+            key=lambda student:
+            student.calculate_average()
         )
 
     def calculate_class_average(self):
-        """Calculate the average of all student averages."""
+        """
+        Calculate the average of all student averages.
+        """
 
         students_with_marks = [
             student
@@ -144,7 +170,9 @@ class StudentManager:
         return total / len(students_with_marks)
 
     def filter_by_grade(self, grade):
-        """Return students who have a specific grade."""
+        """
+        Find students with a specific overall grade.
+        """
 
         grade = grade.upper()
 
@@ -153,56 +181,90 @@ class StudentManager:
             for student in self.students.values()
             if student.get_grade() == grade
         ]
-    
+
     def sort_by_name(self):
-        """Return students sorted alphabetically."""
+        """
+        Sort students alphabetically by name.
+        """
 
         return sorted(
             self.students.values(),
-            key=lambda student: student.name.lower()
+            key=lambda student:
+            student.name.lower()
         )
 
     def sort_by_average(self, descending=True):
-        """Return students sorted by average."""
+        """
+        Sort students according to average marks.
+        """
 
         return sorted(
             self.students.values(),
-            key=lambda student: student.calculate_average(),
+            key=lambda student:
+            student.calculate_average(),
             reverse=descending
         )
-    
+
     def save_students(self):
-        """Save all students to JSON."""
+        """
+        Save all students to a JSON file.
+        """
 
         data = {
             student_id: student.to_dict()
-            for student_id, student in self.students.items()
+            for student_id, student
+            in self.students.items()
         }
 
-        with open(self.filename, "w") as file:
-            json.dump(data, file, indent=4)
+        with open(
+            self.filename,
+            "w"
+        ) as file:
+
+            json.dump(
+                data,
+                file,
+                indent=4
+            )
 
     def load_students(self):
-        """Load students from JSON."""
+        """
+        Load students from the JSON file.
+        """
 
         if not os.path.exists(self.filename):
             return
 
         try:
-            with open(self.filename, "r") as file:
+
+            with open(
+                self.filename,
+                "r"
+            ) as file:
+
                 data = json.load(file)
 
             self.students = {
-                student_id: Student.from_dict(student_data)
-                for student_id, student_data in data.items()
+                student_id:
+                Student.from_dict(student_data)
+
+                for student_id, student_data
+                in data.items()
             }
 
         except json.JSONDecodeError:
-            print("Warning: Could not read the student data file.")
+
+            print(
+                "Warning: Could not read "
+                "the student data file."
+            )
+
             self.students = {}
 
     def count_students(self):
-        """Return the number of students."""
+        """
+        Return the total number of students.
+        """
 
         return len(self.students)
 
